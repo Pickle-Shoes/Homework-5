@@ -10,13 +10,14 @@ import java.util.concurrent.*;
    Compile using: javac Rsa.java
    Run using: java Rsa [digit-length]
 */
+
 class Rsa {
     static final BigInteger TWO = new BigInteger("2");
 
     public static void main (String [] args) {
 
         int bitLength = 8; // default to starting at 8
-	if (args.length == 1)
+		if (args.length == 1)
 	    try {
 		bitLength = Integer.parseInt(args[0]);
 	    }
@@ -27,47 +28,48 @@ class Rsa {
 	
         Random r = new Random(); // should only ever be called once in a Java program!
 	
-	// LOOP OVER THE BIT LENGTH HERE
+		// LOOP OVER THE BIT LENGTH HERE
+		for(; bitLength <= 100; bitLength++){
+			// Produce two random primes up to the specified bit length
+			BigInteger n = BigInteger.ONE;
+			int calcBitLength = 0;
+			do {
+				BigInteger p = BigInteger.probablePrime(bitLength, r);
+				BigInteger q = BigInteger.probablePrime(bitLength, r);
+				n = p.multiply(q);
+				//System.out.println("p="+p+" q="+q+" n="+n);
 
-	// Produce two random primes up to the specified bit length
-	BigInteger n = BigInteger.ONE;
-	int calcBitLength = 0;
-	do {
-	    BigInteger p = BigInteger.probablePrime(bitLength, r);
-	    BigInteger q = BigInteger.probablePrime(bitLength, r);
-	    n = p.multiply(q);
-	    System.out.println("p="+p+" q="+q+" n="+n);
+				// recalculate the bit length based on the produced value of n
+				// it could be less than bitLength. We want it to be the same.
+				calcBitLength = n.bitLength()/2;
+			} while (calcBitLength != bitLength);
+			
+			// calculate the upper value of the search range.
+			// max is maximum value for the given bit length. It's likely overly large. Can it be smaller?
+				BigInteger max = TWO.pow(calcBitLength+1).subtract(BigInteger.ONE);
+				System.out.println("bitLength="+calcBitLength ); //", max="+max
 
-	    // recalculate the bit length based on the produced value of n
-	    // it could be less than bitLength. We want it to be the same.
-	    calcBitLength = n.bitLength()/2;
-	} while (calcBitLength != bitLength);
-	
-	// calculate the upper value of the search range.
-	// max is maximum value for the given bit length. It's likely overly large. Can it be smaller?
-        BigInteger max = TWO.pow(calcBitLength+1).subtract(BigInteger.ONE);
-        System.out.println("bitLength="+calcBitLength+ ", max="+max);
+				// attempt to factor n. start at the sqrt of n and work up.
+				BigInteger i = n.sqrt();
+				//System.out.println("initial i="+i);
 
-        // attempt to factor n. start at the sqrt of n and work up.
-        BigInteger i = n.sqrt();
-        System.out.println("initial i="+i);
-
-	// Try to invoke the garbage collector before cracking so that it is less likely to happen
-	// during cracking. Java might listen.
-	System.gc();
-	
-        ForkJoinPool fjPool = new ForkJoinPool();
-	long startTime = System.currentTimeMillis();
-        // if you had an idea that the solution was within a certain range of numbers,
-	// e.g., close to the sqrt of n, you would want to adjust the search to concentrate on this area
-	// rather than creating an initial set of thread tasks that span the entire range from the sqrt of n
-	// up to max
-	ForkJoinRsaTask forkJoinRsaTask = new ForkJoinRsaTask(n, i, max);
-	ForkJoinRsaTask.initCont(); // this really should be done internal to the class
-	fjPool.invoke(forkJoinRsaTask);
-	
-	long endTime = System.currentTimeMillis();
-	System.out.println("Elapsed time: " + (endTime-startTime) + "ms");
+			// Try to invoke the garbage collector before cracking so that it is less likely to happen
+			// during cracking. Java might listen.
+			System.gc();
+			
+				ForkJoinPool fjPool = new ForkJoinPool();
+			long startTime = System.currentTimeMillis();
+				// if you had an idea that the solution was within a certain range of numbers,
+			// e.g., close to the sqrt of n, you would want to adjust the search to concentrate on this area
+			// rather than creating an initial set of thread tasks that span the entire range from the sqrt of n
+			// up to max
+			ForkJoinRsaTask forkJoinRsaTask = new ForkJoinRsaTask(n, i, max);
+			ForkJoinRsaTask.initCont(); // this really should be done internal to the class
+			fjPool.invoke(forkJoinRsaTask);
+			
+			long endTime = System.currentTimeMillis();
+			System.out.println("Elapsed time: " + (endTime-startTime) + "ms");
+		}
     }
 }
 
@@ -111,8 +113,8 @@ class ForkJoinRsaTask extends RecursiveAction
 		    {
 			if (n.mod(currentPrime).equals(BigInteger.ZERO))
 			    {
-				System.out.println("Keys (p,q): " + currentPrime+", " +
-						   n.divide(currentPrime));
+				//System.out.println("Keys (p,q): " + currentPrime+", " +
+				//		   n.divide(currentPrime));
 				// iF this was a "home run" hack trying to just exit as soon as a factor was found,
 				// we could do that right here. Otherwise, we have to coordinate with the threads
 				// through the "cont" variable so they know they need to exit. 

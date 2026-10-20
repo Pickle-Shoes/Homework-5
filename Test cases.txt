@@ -1,0 +1,90 @@
+Test 1:
+
+bitLength=16
+Elapsed time: 484ms
+bitLength=17
+Elapsed time: 172ms
+bitLength=18
+Elapsed time: 192ms
+bitLength=19
+Elapsed time: 368ms
+bitLength=20
+Elapsed time: 716ms
+bitLength=21
+Elapsed time: 142ms
+bitLength=22
+Elapsed time: 2676ms
+bitLength=23
+Elapsed time: 6450ms
+bitLength=24
+Elapsed time: 11794ms
+bitLength=25
+Elapsed time: 18285ms
+bitLength=26
+Elapsed time: 37945ms
+bitLength=27
+Elapsed time: 39020ms
+bitLength=28
+Elapsed time: 302627ms
+
+Test 2:
+
+bitLength=16
+Elapsed time: 306ms
+bitLength=17
+Elapsed time: 190ms
+bitLength=18
+Elapsed time: 227ms
+bitLength=19
+Elapsed time: 376ms
+bitLength=20
+Elapsed time: 948ms
+bitLength=21
+Elapsed time: 1750ms
+bitLength=22
+Elapsed time: 3815ms
+bitLength=23
+Elapsed time: 346ms
+bitLength=24
+Elapsed time: 17553ms
+bitLength=25
+Elapsed time: 17647ms
+bitLength=26
+Elapsed time: 7127ms
+bitLength=27
+Elapsed time: 100300ms
+bitLength=28
+Elapsed time: 209196ms
+
+Test 3:
+
+bitLength=16
+Elapsed time: 377ms
+bitLength=17
+Elapsed time: 346ms
+bitLength=18
+Elapsed time: 163ms
+bitLength=19
+Elapsed time: 406ms
+bitLength=20
+Elapsed time: 1363ms
+bitLength=21
+Elapsed time: 2352ms
+bitLength=22
+Elapsed time: 3052ms
+bitLength=23
+Elapsed time: 1840ms
+bitLength=24
+Elapsed time: 14151ms
+bitLength=25
+Elapsed time: 27637ms
+bitLength=26
+Elapsed time: 33686ms
+bitLength=27
+Elapsed time: 22817ms
+bitLength=28
+Elapsed time: 226012ms
+
+
+Highest bitLength: 32, 340261ms //I think this one was just lucky because the one before it took much longer
+bitLength: 31, 932672ms
